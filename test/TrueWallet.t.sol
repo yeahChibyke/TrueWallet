@@ -3,14 +3,17 @@ pragma solidity ^0.8.20;
 
 import {TrueWallet} from "../src/Truewallet.sol";
 import {Test, console2} from "forge-std/Test.sol";
+import {DeployTrueWallet} from "../script/DeployTrueWallet.s.sol";
 
 contract TrueWalletTest is Test {
     TrueWallet trueWallet;
     address payable trueOwner;
 
     function setUp() external {
-        trueOwner = payable(address(this));
-        trueWallet = new TrueWallet();
+        trueOwner = payable(msg.sender);
+        DeployTrueWallet deployTrueWallet = new DeployTrueWallet();
+        // trueWallet = new TrueWallet();
+        trueWallet = deployTrueWallet.run();
     }
 
     /*function setUp() external {
@@ -31,8 +34,8 @@ contract TrueWalletTest is Test {
         console2.log(msg.sender);
         console2.log(address(this));
 
-        assertEq(trueWallet.trueOwner(), address(this));
-        // assertEq(trueWallet.trueOwner(), msg.sender);
+        // assertEq(trueWallet.trueOwner(), address(this));
+        assertEq(trueWallet.trueOwner(), msg.sender);
     }
 
     function testInitialOwner() public {
