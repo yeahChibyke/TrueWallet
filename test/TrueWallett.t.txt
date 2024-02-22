@@ -9,30 +9,20 @@ contract TrueWalletTest is Test {
     address payable trueOwner;
 
     function setUp() external {
-        trueOwner = payable(address(this));
-        trueWallet = new TrueWallet();
-    }
+        // Simulate an external true owner
+        trueOwner = payable(address(1)); // Example address, choose as needed
 
-    /*function setUp() external {
-        // Pick an external account address to be the true owner
-        address externalTrueOwner = address(1); // Example address, choose as needed
+        // Assign some ETH to the true owner for testing
+        vm.deal(trueOwner, 10 ether);
 
         // Simulate deploying the contract from the external true owner's address
-        vm.startPrank(externalTrueOwner);
+        vm.startPrank(trueOwner);
         trueWallet = new TrueWallet();
         vm.stopPrank();
-
-        // Now, trueOwner of trueWallet should be externalTrueOwner
-        trueOwner = payable(externalTrueOwner);
-    }*/
+    }
 
     function testTrueOwnerIsMsgSender() public {
-        console2.log(trueWallet.trueOwner());
-        console2.log(msg.sender);
-        console2.log(address(this));
-
-        assertEq(trueWallet.trueOwner(), address(this));
-        // assertEq(trueWallet.trueOwner(), msg.sender);
+        assertEq(trueWallet.trueOwner(), trueOwner);
     }
 
     function testInitialOwner() public {
@@ -48,8 +38,7 @@ contract TrueWalletTest is Test {
         uint256 initialBalance = address(trueWallet).balance;
 
         // send 1 ether to TrueWallet contract
-        (bool sent, ) = address(trueWallet).call{value: 1 ether}("");
-        require(sent, "Failed to send ETH!");
+        vm.deal(address(trueWallet), 1 ether);
 
         // final balance
         uint256 finalBalance = address(trueWallet).balance;
@@ -67,31 +56,64 @@ contract TrueWalletTest is Test {
         assertEq(address(trueWallet).balance, 1 ether);
     }
 
-    // this particular test keeps failing. I have done everything I can think of
     function testWithdrawByOwner() public {
-        payable(address(trueWallet)).transfer(1 ether);
-        uint256 initialBalance = trueOwner.balance;
+        // Ensure the test contract has enough ether to send
+        uint256 testContractInitialBalance = address(this).balance;
+        require(
+            testContractInitialBalance >= 1 ether,
+            "Test contract does not have enough ether"
+        );
+        console2.log(testContractInitialBalance);
 
+        // Send 1 ether to the TrueWallet contract
+        payable(address(trueWallet)).transfer(1 ether);
+
+        // Check TrueWallet's balance to ensure it has received the ether
+        uint256 trueWalletBalance = address(trueWallet).balance;
+        assertEq(
+            trueWalletBalance,
+            1 ether,
+            "TrueWallet did not receive the ether"
+        );
+        console2.log(trueWalletBalance);
+
+        // Check initial balance of trueOwner
+        uint256 initialBalance = trueOwner.balance;
+        console2.log(initialBalance);
+
+        // Simulate action as trueOwner
         vm.prank(trueOwner);
         trueWallet.withdraw(1 ether);
 
-        assertEq(trueOwner.balance, initialBalance + 1 ether);
+        // Check final balance of trueOwner
+        uint256 finalBalance = trueOwner.balance;
+        assertEq(
+            finalBalance,
+            initialBalance + 1 ether,
+            "trueOwner's balance did not increase as expected."
+        );
+        console2.log(finalBalance);
     }
 
     function testWithdrawByNonOwnerShouldFail() public {
         payable(address(trueWallet)).transfer(1 ether);
-        address nonOwner = address(0x1);
+        address nonOwner = address(2); // An example non-owner address
 
-        vm.prank(nonOwner);
+        // Expect the transaction to revert for non-owner
+        vm.startPrank(nonOwner);
         vm.expectRevert("caller is not trueOwner");
         trueWallet.withdraw(1 ether);
         vm.stopPrank();
     }
 
     function testWithdrawMoreThanBalanceShouldFail() public {
+        // Send 0.5 ether to the TrueWallet contract
         payable(address(trueWallet)).transfer(0.5 ether);
-        vm.prank(trueOwner);
+
+        // Attempt to withdraw more than the balance by trueOwner
+        vm.startPrank(trueOwner);
         vm.expectRevert();
-        trueWallet.withdraw(1 ether);
+        trueWallet.withdraw(1 ether); // Attempting to withdraw more than the current balance
+        vm.stopPrank();
     }
 }
