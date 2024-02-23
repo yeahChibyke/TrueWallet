@@ -1,1 +1,4 @@
-First deployed contract Sepolia address = 0x92d9AA4e6bcAD90Db516376e45B1a882F679A337
+First deployment for TrueWallet Sepolia address = 0x92d9AA4e6bcAD90Db516376e45B1a882F679A337
+
+First deployment for DecimalWrapper Sepolia address = 0x48F97Dcb1519f33FB2a16e938C5AE16aEB8c736d
+
