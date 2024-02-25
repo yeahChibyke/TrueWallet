@@ -2,11 +2,11 @@
 pragma solidity ^0.8.20;
 
 import {TrueLibraryUSD} from "./libraries/TrueLibraryUSD.sol";
-import {TrueLibraryETH} from "./libraries/TrueLibraryETH.sol";
+import {TrueLibraryBTC} from "./libraries/TrueLibraryBTC.sol";
 
 contract TrueWallet {
     using TrueLibraryUSD for uint256;
-    using TrueLibraryETH for uint256;
+    using TrueLibraryBTC for uint256;
 
     address payable public trueOwner;
 
@@ -25,27 +25,17 @@ contract TrueWallet {
         return address(this).balance;
     }
 
-    function getETHperUSDPrice() public view returns (uint256) {
-        return TrueLibraryUSD.getETHperUSD_Price();
+    function getBalanceInUSD() external view returns (uint256) {
+        uint256 ethInUSD = TrueLibraryUSD.getETHperUSD_Price();
+        uint256 ethBal = address(this).balance;
+        uint256 usdBal = (ethInUSD * ethBal) / 1e18;
+        return usdBal;
     }
 
-    function getBTCperUSDPrice() public view returns (uint256) {
-        return TrueLibraryUSD.getBTCperUSD_Price();
-    }
-
-    function getEURperUSDPrice() public view returns (uint256) {
-        return TrueLibraryUSD.getEURperUSD_Price();
-    }
-
-    function getGBPperUSDPrice() public view returns (uint256) {
-        return TrueLibraryUSD.getGBPperUSD_Price();
-    }
-
-    function getLINKperUSDPrice() public view returns (uint256) {
-        return TrueLibraryUSD.getLINKperUSD_Price();
-    }
-
-    function getUSDCperUSDPrice() public view returns (uint256) {
-        return TrueLibraryUSD.getUSDCperUSD_Price();
+    function getBalanceInBTC() external view returns (uint256) {
+        uint256 ethInBTC = TrueLibraryBTC.getETHperBTC_Price();
+        uint256 ethBal = address(this).balance;
+        uint256 btcBal = (ethInBTC * ethBal) / 1e18;
+        return btcBal;
     }
 }
