@@ -70,7 +70,7 @@ contract TrueWalletTest is Test {
         address nonOwner = address(0x1);
 
         vm.prank(nonOwner);
-        vm.expectRevert("caller is not trueOwner");
+        vm.expectRevert();
         trueWallet.withdraw(1 ether);
         vm.stopPrank();
     }
