@@ -1,30 +1,31 @@
 // SPDX-License-Identifier: MIT
-pragma solidity ^0.8.20; // Updated to a secure version of Solidity
+pragma solidity ^0.8.20;
 
 import {TrueLibraryUSD} from "./libraries/TrueLibraryUSD.sol";
 import {TrueLibraryBTC} from "./libraries/TrueLibraryBTC.sol";
+
+error TrueWallet__NotTrueOwner();
 
 contract TrueWallet {
     using TrueLibraryUSD for uint256;
     using TrueLibraryBTC for uint256;
 
-    address payable public trueOwner;
+    address payable public immutable i_TrueOwner;
     uint256 private contractBalance;
 
     constructor() {
-        trueOwner = payable(msg.sender);
+        i_TrueOwner = payable(msg.sender);
     }
 
     receive() external payable {
-        contractBalance += msg.value; // Update contract balance on Ether received
+        contractBalance += msg.value;
     }
 
-    function withdraw(uint256 amount) external {
-        require(msg.sender == trueOwner, "Caller is not the owner");
+    function withdraw(uint256 amount) external onlyTrueOwner {
         require(amount <= contractBalance, "Insufficient balance");
 
         contractBalance -= amount; // Update contract balance before transfer
-        (bool sent, ) = trueOwner.call{value: amount}("");
+        (bool sent, ) = i_TrueOwner.call{value: amount}("");
         require(sent, "Failed to send Ether");
     }
 
@@ -42,5 +43,12 @@ contract TrueWallet {
         uint256 ethInBTC = TrueLibraryBTC.getETHperBTC_Price();
         uint256 btcBal = (ethInBTC * contractBalance) / 1e18;
         return btcBal;
+    }
+
+    modifier onlyTrueOwner() {
+        if (msg.sender != i_TrueOwner) {
+            revert TrueWallet__NotTrueOwner();
+        }
+        _;
     }
 }

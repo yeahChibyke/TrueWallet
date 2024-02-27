@@ -7,25 +7,25 @@ import {DeployTrueWallet} from "../script/DeployTrueWallet.s.sol";
 
 contract TrueWalletTest is Test {
     TrueWallet trueWallet;
-    address payable trueOwner;
+    address payable i_TrueOwner;
 
     function setUp() external {
-        trueOwner = payable(msg.sender);
+        i_TrueOwner = payable(msg.sender);
         DeployTrueWallet deployTrueWallet = new DeployTrueWallet();
         // trueWallet = new TrueWallet();
         trueWallet = deployTrueWallet.run();
     }
 
     function testTrueOwnerIsMsgSender() public {
-        console2.log(trueWallet.trueOwner());
+        console2.log(trueWallet.i_TrueOwner());
         console2.log(msg.sender);
         console2.log(address(this));
 
-        assertEq(trueWallet.trueOwner(), msg.sender);
+        assertEq(trueWallet.i_TrueOwner(), msg.sender);
     }
 
     function testInitialOwner() public {
-        assertEq(trueWallet.trueOwner(), trueOwner);
+        assertEq(trueWallet.i_TrueOwner(), i_TrueOwner);
     }
 
     function testBalance() public {
@@ -55,12 +55,12 @@ contract TrueWalletTest is Test {
         (bool sent, ) = address(trueWallet).call{value: 1 ether}("");
         require(sent, "Failed to send ETH!");
 
-        uint256 initialBalance = trueOwner.balance;
+        uint256 initialBalance = i_TrueOwner.balance;
 
-        vm.prank(trueOwner);
+        vm.prank(i_TrueOwner);
         trueWallet.withdraw(1 ether);
 
-        assertEq(trueOwner.balance, initialBalance + 1 ether);
+        assertEq(i_TrueOwner.balance, initialBalance + 1 ether);
     }
 
     function testWithdrawByNonOwnerShouldFail() public {
@@ -79,7 +79,7 @@ contract TrueWalletTest is Test {
         (bool sent, ) = address(trueWallet).call{value: 0.5 ether}("");
         require(sent, "Failed to send ETH!");
 
-        vm.prank(trueOwner);
+        vm.prank(i_TrueOwner);
         vm.expectRevert();
         trueWallet.withdraw(1 ether);
     }
