@@ -76,4 +76,4 @@ If you'd like to contribute, please fork the repository and create a pull reques
 ## Contact
 
 Email: chibykepride@gmail.com  
-Github: yeahChibyke
+Github: [yeahChibyke](https://github.com/yeahChibyke)
