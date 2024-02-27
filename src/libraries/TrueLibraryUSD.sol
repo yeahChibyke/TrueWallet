@@ -12,7 +12,7 @@ library TrueLibraryUSD {
         (, int256 answer, , , ) = ETHperUSD_Price.latestRoundData();
         // typecast answer from int256 to uint256
         // multiply by 1e10 to ensure precision
-        // msg.value is in 1e18, and answer is in 1e8 (check getETHperUSD_Decimal in DecimalWrapper to confirm)
+        // msg.value is in 1e18, and answer is in 1e8 (check getETHperUSD_Decimal in DecimalLibrary to confirm)
         return uint256(answer * 1e10);
     }
 
@@ -24,7 +24,7 @@ library TrueLibraryUSD {
         (, int256 answer, , , ) = BTCperUSD_Price.latestRoundData();
         // typecast answer from int256 to uint256
         // multiply by 1e10 to ensure precision
-        // msg.value is in 1e18, and answer is in 1e8 (check getBTCperUSD_Decimal in DecimalWrapper to confirm)
+        // msg.value is in 1e18, and answer is in 1e8 (check getBTCperUSD_Decimal in DecimalLibrary to confirm)
         return uint256(answer * 1e10);
     }
 
@@ -36,7 +36,7 @@ library TrueLibraryUSD {
         (, int256 answer, , , ) = EURperUSD_Price.latestRoundData();
         // typecast answer from int256 to uint256
         // multiply by 1e10 to ensure precision
-        // msg.value is in 1e18, and answer is in 1e8 (check getEURperUSD_Decimal in DecimalWrapper to confirm)
+        // msg.value is in 1e18, and answer is in 1e8 (check getEURperUSD_Decimal in DecimalLibrary to confirm)
         return uint256(answer * 1e10);
     }
 
@@ -48,7 +48,7 @@ library TrueLibraryUSD {
         (, int256 answer, , , ) = GBPperUSD_Price.latestRoundData();
         // typecast answer from int256 to uint256
         // multiply by 1e10 to ensure precision
-        // msg.value is in 1e18, and answer is in 1e8 (check getGBPperUSD_Decimal in DecimalWrapper to confirm)
+        // msg.value is in 1e18, and answer is in 1e8 (check getGBPperUSD_Decimal in DecimalLibrary to confirm)
         return uint256(answer * 1e10);
     }
 
@@ -60,7 +60,7 @@ library TrueLibraryUSD {
         (, int256 answer, , , ) = LINKperUSD_Price.latestRoundData();
         // typecast answer from int256 to uint256
         // multiply by 1e10 to ensure precision
-        // msg.value is in 1e18, and answer is in 1e8 (check getLINKperUSD_Decimal in DecimalWrapper to confirm)
+        // msg.value is in 1e18, and answer is in 1e8 (check getLINKperUSD_Decimal in DecimalLibrary to confirm)
         return uint256(answer * 1e10);
     }
 
@@ -72,7 +72,7 @@ library TrueLibraryUSD {
         (, int256 answer, , , ) = USDCperUSD_Price.latestRoundData();
         // typecast answer from int256 to uint256
         // multiply by 1e10 to ensure precision
-        // msg.value is in 1e18, and answer is in 1e8 (check getUSDCperUSD_Decimal in DecimalWrapper to confirm)
+        // msg.value is in 1e18, and answer is in 1e8 (check getUSDCperUSD_Decimal in DecimalLibrary to confirm)
         return uint256(answer * 1e10);
     }
 }

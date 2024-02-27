@@ -2,3 +2,5 @@ First deployment for TrueWallet Sepolia address = 0x92d9AA4e6bcAD90Db516376e45B1
 
 First deployment for DecimalWrapper Sepolia address = 0x48F97Dcb1519f33FB2a16e938C5AE16aEB8c736d
 
+Second deployment for TrueWallet Sepolia address = 0x521172e43255C979Cc44efE2F707CFf2112e8038
+
