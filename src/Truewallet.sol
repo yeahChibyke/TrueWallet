@@ -15,6 +15,7 @@ contract TrueWallet {
 
     constructor() {
         i_TrueOwner = payable(msg.sender);
+        contractBalance = address(this).balance;
     }
 
     receive() external payable {
